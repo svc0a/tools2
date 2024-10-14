@@ -1,7 +1,7 @@
 package start2
 
 import (
-	"bitbucket.org/alibaba-international/ghs-common/adapter"
+	"bitbucket.org/alibaba-international/ghs-common/model"
 	"bitbucket.org/alibaba-international/go-pkg/env"
 	"bitbucket.org/alibaba-international/go-pkg/logger"
 	"bitbucket.org/alibaba-international/go-pkg/rest/api"
@@ -19,7 +19,7 @@ import (
 func Start(apis []api.Api) {
 	logger.Init()
 	g := gin.New()
-	for _, env1 := range []adapter.Environment{adapter.EnvTest, adapter.EnvProd} {
+	for _, env1 := range []model.Environment{model.EnvTest, model.EnvProd} {
 		r := router.NewFromGin(g, string(env1))
 		r.Use(func(c *api.Context) {
 			c.Set("env", env1)

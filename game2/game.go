@@ -15,8 +15,8 @@ type GameObject interface {
 
 type Codes[T GameObject] map[model.Environment]map[GameCode]T
 
-func (c *Codes[T]) GetGameName(env model.Environment, code GameCode) (*T, errorx.Error) {
-	m, ok := (*c)[env]
+func (c Codes[T]) GetGameName(env model.Environment, code GameCode) (*T, errorx.Error) {
+	m, ok := c[env]
 	if !ok {
 		return nil, errorx.New("game not found")
 	}
@@ -29,8 +29,8 @@ func (c *Codes[T]) GetGameName(env model.Environment, code GameCode) (*T, errorx
 
 type Games[T GameObject] map[model.Environment]map[GameName]T
 
-func (c *Games[T]) GetGame(env model.Environment, game GameName) (*T, errorx.Error) {
-	m, ok := (*c)[env]
+func (c Games[T]) GetGame(env model.Environment, game GameName) (*T, errorx.Error) {
+	m, ok := c[env]
 	if !ok {
 		return nil, errorx.New("game not found")
 	}

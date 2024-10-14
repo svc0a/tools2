@@ -1,7 +1,7 @@
 package context2
 
 import (
-	"bitbucket.org/alibaba-international/ghs-common/adapter"
+	"bitbucket.org/alibaba-international/ghs-common/model"
 	"bitbucket.org/alibaba-international/go-pkg/ctxx"
 	"bitbucket.org/alibaba-international/go-pkg/errorx"
 	"bitbucket.org/alibaba-international/go-pkg/rest/api"
@@ -18,7 +18,7 @@ func ToAny[T any](in T) *any {
 	return &result
 }
 
-func GetContext(provider string, environment *adapter.Environment) ctxx.Context {
+func GetContext(provider string, environment *model.Environment) ctxx.Context {
 	return ctxx.WithMetadata(context.Background(), &ctxx.Metadata{
 		TraceID:   types.NewID(),
 		Operator:  types.NewID().String(),
@@ -28,12 +28,12 @@ func GetContext(provider string, environment *adapter.Environment) ctxx.Context 
 	})
 }
 
-func GetEnvFromContext(ctx *api.Context) (*adapter.Environment, errorx.Error) {
+func GetEnvFromContext(ctx *api.Context) (*model.Environment, errorx.Error) {
 	value, exists := ctx.Get("env")
 	if !exists {
 		return nil, error2.ErrEnvNotFound
 	}
-	env1, ok := value.(adapter.Environment)
+	env1, ok := value.(model.Environment)
 	if !ok {
 		return nil, error2.ErrEnvNotFound
 	}

@@ -11,8 +11,8 @@ type GameName string
 type GameCode string
 
 type GameObject interface {
-	GetName() *GameName
-	GetCode() *GameCode
+	GetName() GameName
+	GetCode() GameCode
 }
 
 type GameHelper[T GameObject] interface {
@@ -46,10 +46,13 @@ func NewHelpers[T GameObject](in string) Helper[T] {
 }
 
 func newHelper[T GameObject](in []T) GameHelper[T] {
-	g := gameHelper[T]{}
+	g := gameHelper[T]{
+		codes: map[GameCode]T{},
+		games: map[GameName]T{},
+	}
 	for _, item := range in {
-		g.codes[*item.GetCode()] = item
-		g.games[*item.GetName()] = item
+		g.codes[item.GetCode()] = item
+		g.games[item.GetName()] = item
 	}
 	return &g
 }

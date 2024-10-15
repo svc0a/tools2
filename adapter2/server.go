@@ -10,9 +10,18 @@ import (
 type Servers map[model.Environment]adapter.Server
 
 func NewServer(providerName string, gameGameLink getGameLinkFunc, stateFunc getBetStateByIDFunc) Servers {
+	testClient := newClient(model.EnvTest, gameGameLink, stateFunc)
+	testServer := adapter.NewServer(model.EnvTest, providerName, testClient)
+	testClient.server = testServer
+	testServer = adapter.NewServer(model.EnvTest, providerName, testClient)
+
+	prodClient := newClient(model.EnvProd, gameGameLink, stateFunc)
+	prodServer := adapter.NewServer(model.EnvTest, providerName, prodClient)
+	prodClient.server = prodServer
+	prodServer = adapter.NewServer(model.EnvProd, providerName, prodClient)
 	return map[model.Environment]adapter.Server{
-		model.EnvTest: adapter.NewServer(model.EnvTest, providerName, newClient(model.EnvTest, gameGameLink, stateFunc)),
-		model.EnvProd: adapter.NewServer(model.EnvProd, providerName, newClient(model.EnvProd, gameGameLink, stateFunc)),
+		model.EnvTest: testServer,
+		model.EnvProd: prodServer,
 	}
 }
 
@@ -23,6 +32,7 @@ type client struct {
 	env                 model.Environment
 	getGameLink         getGameLinkFunc
 	getBetStateByIDFunc getBetStateByIDFunc
+	server              adapter.Server
 }
 
 func newClient(env model.Environment, linkFunc getGameLinkFunc, stateFunc getBetStateByIDFunc) *client {

@@ -1,14 +1,15 @@
-package logger
+package examples
 
 import (
 	"github.com/pkg/errors"
+	"github.com/svc0a/tools2/logger"
 	"testing"
 )
 
-func Test1(t *testing.T) {
-	Init()
+func TestLogger(t *testing.T) {
+	logger.Init()
 	err := outer()
-	Define().Error(err)
+	logger.Define().Error(err)
 }
 
 func inner() error {
